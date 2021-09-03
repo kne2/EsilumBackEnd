@@ -6,8 +6,8 @@
         if(file_exists("../controladores/$clase.class.php"))
             require "../controladores/$clase.class.php";
 
-        if(file_exists("../controladores/$clase.class.php"))
-            require "../Backend/$clase.class.php";
+        if(file_exists("../EsilumBackend/$clase.class.php"))
+            require "../EsilumBackend/$clase.class.php";
     });
 
 
