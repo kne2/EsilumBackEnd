@@ -1,5 +1,5 @@
 <?php 
-    require '../utils/autoloader.php';
+    require '../EsilumBackEnd/utils/autoloader.php';
     
     function generarHtml($vista,$parametros){
         return require "../vistas/$vista.php";
