@@ -10,6 +10,14 @@
         public $avatar;
         public $tipodeusuario;
 
+        public function Guardar(){
+            $this -> prepararInsert();
+            $this -> sentencia -> execute();
+
+            if($this -> sentencia -> error){
+                throw new Exception("Hubo un problema al cargar el usuario: " . $this -> sentencia -> error);
+            }
+        }
 
         public function Actualizar(){
             $this -> prepararUpdate();
@@ -34,6 +42,20 @@
                 $this -> id,
             );
 
+        }
+        private function prepararInsert(){
+            $this -> password = $this -> hashearPassword($this -> password);
+            $sql = "INSERT INTO user(id, passwordhash, nombre, apellido, email, avatar, tipodeusuario) VALUES (?,?,?,?,?,?,?)";
+            $this -> sentencia = $this -> conexion -> prepare($sql);
+            $this -> sentencia -> bind_param("sssssis",
+                $this -> id,
+                $this -> password,
+                ucwords(strtolower($this -> nombre)),
+                ucwords(strtolower($this -> apellido)),
+                $this -> checkEmail(),
+                $this -> avatar,
+                $this -> tipodeusuario, 
+            );
         }
 
         private function checkEmail(){
@@ -68,9 +90,7 @@
         }
 
         private function compararPasswords($passwordHasheado){
-            error_log($this -> password . " ". strval($passwordHasheado));
-            return true;
-            return hash_equals($this -> password, strval($passwordHasheado));
+            return password_verify($this -> password, strval($passwordHasheado));
         }
 
         public function getDatosConId(){

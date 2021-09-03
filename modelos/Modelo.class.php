@@ -27,10 +27,10 @@
         }
 
         protected function inicializarParametrosDeConexion(){
-            $this -> IpDB = IP_DB_ALUMNO;
-            $this -> NombreUsuarioDB = USUARIO_DB_ALUMNO;
-            $this -> PasswordDB = PASSWORD_DB_ALUMNO;
-            $this -> NombreDB = NOMBRE_DB_ALUMNO;
-            $this -> PuertoDB = PUERTO_DB_ALUMNO;
+            $this -> IpDB = IP_DB;
+            $this -> NombreUsuarioDB = USUARIO_DB;
+            $this -> PasswordDB = PASSWORD_DB;
+            $this -> NombreDB = NOMBRE_DB;
+            $this -> PuertoDB = PUERTO_DB;
         }
     }

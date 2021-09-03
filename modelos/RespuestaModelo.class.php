@@ -28,7 +28,6 @@
                 $this -> consultaId
             );
         }
-
         public function eliminar(){
             $this -> prepararEliminar();
             $this -> sentencia -> execute();
@@ -43,6 +42,8 @@
             $this -> sentencia = $this -> conexion -> prepare($sql);
             $this -> sentencia -> bind_param("i", $this -> id);
         }
+
+
 
         public function obtenerTodos($id){
             $filas = $this -> crearArrayDeRespuestas($id);

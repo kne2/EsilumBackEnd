@@ -3,11 +3,11 @@
     require '../utils/autoloader.php';
 
     class UserController{
-        public static function IniciarSesion($id,$hash){
+        public static function IniciarSesion($id,$password){
             try{
                 $u = new UserModelo();
                 $u -> id = $id;
-                $u -> password = $hash;
+                $u -> password = $password;
                 $u -> Autenticar();
                 self::crearSesion($u);
                 //cargarVista("menuPrincipal");
@@ -31,27 +31,39 @@
             return $u;
         }
 
+        public static function MostrarLogin(){
+            session_start();
+            if(isset($_SESSION['autenticado'])) header("Location: /principal");
+            else return cargarVista("login");
+        }
+
+        public static function MostrarRegistro(){
+            session_start();
+            if(isset($_SESSION['autenticado'])) header("Location: /principal");
+            else return cargarVista("registro");
+        }
+
         public static function MostrarMenuPrincipal(){
             session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: http://".$_SERVER['SERVER_NAME']);
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
             else return cargarVista("bienvenida");
         }
 
         public static function MostrarEditarPerfil(){
             session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: http://".$_SERVER['SERVER_NAME']);
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
             else return cargarVista("perfiledicion");
         }
 
         public static function MostrarPerfil(){
             session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: http://".$_SERVER['SERVER_NAME']);
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
             else return cargarVista("perfil");
         }
 
         public static function MostrarRealizarConsulta(){
             session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: http://".$_SERVER['SERVER_NAME']);
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
             elseif($_SESSION['usuarioTipodeusuario'] !== "alumno") header("Location: /principal");
             else return cargarVista("realizarconsulta");
         }
@@ -79,9 +91,33 @@
             unset($_SESSION['usuarioEmail']);
             unset($_SESSION['usuarioAvatar']);
             unset($_SESSION['usuarioTipodeusuario']);
-            header("Location: http://".$_SERVER['SERVER_NAME']."/cerrarsesion");
+            header("Location: /login");
         }
 
+        public static function AltaDeUsuario($id,$nombre,$apellido,$email,$password1,$password2,$tipodeusuario){
+
+            if($id !== "" && $password1 !== "" && $nombre !== "" && $apellido !== "" && $tipodeusuario !== "" && $password1 == $password2){
+                if($tipodeusuario == "alumno" || $tipodeusuario == "docente" || $tipodeusuario == "admin"){    
+                    try{
+                        $u = new UserModelo();
+                        $u -> id = $id;   
+                        $u -> nombre = $nombre;
+                        $u -> apellido = $apellido;
+                        $u -> email = $email;
+                        $u -> password = $password1;
+                        $u -> avatar = rand(1,10);
+                        $u -> tipodeusuario = $tipodeusuario;
+                        $u -> Guardar();
+                        return header("Location: /login");
+                    }
+                    catch(Exception $e){
+                        error_log($e -> getMessage());
+                        return generarHtml('registro',["falla" => true]);
+                    }
+                }
+            }
+            return generarHtml('registro',["falla" => true]);
+        }
         public static function EditarUser($id,$nombre,$apellido,$password1,$password2,$email,$avatar){
             if($id !== "" && $password1 !== "" && $nombre !== "" && $apellido !== "" && $avatar !== "" && $password1 == $password2){
                     try{

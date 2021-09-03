@@ -6,7 +6,7 @@
 
         public static function NuevaConsulta($titulo,$descripcion){
             if(!isset($_SESSION['autenticado'])){
-                header("Location: http://".$_SERVER['SERVER_NAME']);
+                header("Location: /login");
                 return;
             }
             if($titulo !== ""){
@@ -32,7 +32,7 @@
         public static function ObtenerConsultas(){
             
             if(!isset($_SESSION['autenticado'])){
-                header("Location: http://".$_SERVER['SERVER_NAME']);
+                header("Location: /login");
                 return;
             }
             

@@ -32,7 +32,6 @@
                 $this -> alumnoId
             );
         }
-
         public function eliminar(){
             $this -> prepararEliminar();
             $this -> sentencia -> execute();
@@ -47,6 +46,8 @@
             $this -> sentencia = $this -> conexion -> prepare($sql);
             $this -> sentencia -> bind_param("i", $this -> id);
         }
+
+
 
         public function obtenerTodos(){
             $filas = $this -> crearArrayDeConsultas();
@@ -83,7 +84,6 @@
             $this -> asignarCamposDeConsulta($resultado);
 
         }
-        
         public function getDatosConId(){
             $sql = "SELECT consultaId,consultaTitulo,consultaDescripcion,fecha,resuelto,alumnoId FROM consulta WHERE consultaId = ?";
             $this -> sentencia = $this -> conexion -> prepare($sql);
