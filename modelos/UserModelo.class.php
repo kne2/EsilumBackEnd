@@ -113,7 +113,10 @@
         private function prepararAutenticacion(){
             $sql = "SELECT id, passwordhash, nombre, apellido, email, avatar, tipodeusuario FROM user WHERE id = ? AND tipodeusuario = ?";
             $this -> sentencia = $this -> conexion -> prepare($sql);
-            $this -> sentencia -> bind_param("ss", $this -> id, APP);
+            $this -> sentencia -> bind_param("ss",
+                $this -> id,
+                APP,
+            );
         }
 
         private function asignarDatosDeUsuario($resultado){
