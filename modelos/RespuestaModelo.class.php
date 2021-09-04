@@ -9,7 +9,6 @@
         public $consultaId;
 
         public function guardar(){
-            error_log("Guardar");
             $this -> prepararInsert();
             $this -> sentencia -> execute();
 
