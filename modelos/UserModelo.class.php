@@ -82,11 +82,12 @@
                    $this -> asignarDatosDeUsuario($resultado);
                 }   
                 else{
+                    error_log("Contraseña incorrecta " . $this -> id);
                     throw new Exception("Contraseña incorrecta");
                 }
             }
             
-            else throw new Exception("Error al iniciar sesion");
+            else error_log("No se encontraron usuarios con id " . $this -> id); throw new Exception("Error al iniciar sesion");
         }
 
         private function compararPasswords($passwordHasheado){
@@ -115,7 +116,7 @@
             $this -> sentencia = $this -> conexion -> prepare($sql);
             $this -> sentencia -> bind_param("ss",
                 $this -> id,
-                $this -> tipodeusuario,
+                $this -> tipodeusuario
             );
         }
 

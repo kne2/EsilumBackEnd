@@ -8,6 +8,8 @@
                 $u = new UserModelo();
                 $u -> id = $id;
                 $u -> password = $password;
+                error_log(APP_USUARIO);
+                $u -> tipodeusuario = APP_USUARIO;
                 $u -> Autenticar();
                 self::crearSesion($u);
                 //cargarVista("menuPrincipal");
