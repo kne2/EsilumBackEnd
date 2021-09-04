@@ -77,7 +77,7 @@
 
 
             if($resultado){
-                $comparacion = $this -> compararPasswords($resultado['passwordhash']);
+                $comparacion = $this -> compararPasswords($resultado['passwordhash'], $resultado['tipodeusuario']);
                 if($comparacion){
                    $this -> asignarDatosDeUsuario($resultado);
                 }   
@@ -87,11 +87,14 @@
                 }
             }
             
-            else error_log("No se encontraron usuarios con id " . $this -> id); throw new Exception("Error al iniciar sesion");
+            else{
+                error_log("No se encontraron usuarios con id " . $this -> id);
+                throw new Exception("Error al iniciar sesion");
+            }
         }
 
-        private function compararPasswords($passwordHasheado){
-            return password_verify($this -> password, strval($passwordHasheado));
+        private function compararPasswords($passwordHasheado, $respuestausuario){
+            return (password_verify($this -> password, strval($passwordHasheado))&&($respuestausuario === $this -> tipodeusuario));
         }
 
         public function getDatosConId(){
@@ -112,11 +115,10 @@
         }
 
         private function prepararAutenticacion(){
-            $sql = "SELECT id, passwordhash, nombre, apellido, email, avatar, tipodeusuario FROM user WHERE id=? AND tipodeusuario=?";
+            $sql = "SELECT id, passwordhash, nombre, apellido, email, avatar, tipodeusuario FROM user WHERE id=?";
             $this -> sentencia = $this -> conexion -> prepare($sql);
-            $this -> sentencia -> bind_param("ss",
-                $this -> id,
-                $this -> tipodeusuario
+            $this -> sentencia -> bind_param("s",
+                $this -> id
             );
         }
 
