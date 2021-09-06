@@ -157,6 +157,7 @@
                     }
                 }
             }
+            print_r($arraydegruposalumno);
             return $arraydegruposalumno;
 
         }

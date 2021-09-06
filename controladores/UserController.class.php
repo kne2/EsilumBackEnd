@@ -67,7 +67,7 @@
         public static function MostrarGrupos(){
             session_start();
             if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            else return cargarVista("grupos");
+            return generarHtml('grupos',['grupos' => self::DevolverGruposDeAlumno($_SESSION['id'])]);
         }
 
         public static function MostrarRealizarConsulta(){
