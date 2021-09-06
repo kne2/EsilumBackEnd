@@ -159,6 +159,6 @@
         public static function DevolverGruposDeAlumno($id){
             $u = new UserModelo();
             $u -> id = $id;
-            return $u -> DevolverGruposDeAlumno;
+            return $u -> GetGruposDeAlumno;
         }
     }
