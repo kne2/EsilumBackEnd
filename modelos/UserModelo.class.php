@@ -157,7 +157,7 @@
                     }
                 }
             }
-            print_r($arraydegruposalumno);
+            error_log(print_r($arraydegruposalumno, True));
             return $arraydegruposalumno;
 
         }
