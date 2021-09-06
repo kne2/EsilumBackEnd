@@ -64,6 +64,12 @@
             else return cargarVista("perfil");
         }
 
+        public static function MostrarGrupos(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("grupos");
+        }
+
         public static function MostrarRealizarConsulta(){
             session_start();
             if(!isset($_SESSION['autenticado'])) header("Location: /login");
