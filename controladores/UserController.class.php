@@ -26,6 +26,7 @@
         public static function MostrarConsulta($id){
             generarHtml("consulta",["mostrarConsultaId" => $id]);
         }
+        
         public static function DevolverUserConId($id){
             $u = new UserModelo();
             $u -> id = $id;
@@ -141,5 +142,17 @@
                     }
             }
             return generarHtml('perfil',["falla" => true]);
+        }
+
+        public static function AsignarGruposAlumno($id, $grupos){
+            $u = new UserModelo();
+            $u -> id = $id;
+            $u -> AsignarGruposAlumno($grupos);
+        }
+
+        public static function DevolverGruposDeAlumno($id){
+            $u = new UserModelo();
+            $u -> id = $id;
+            return $u -> DevolverGruposDeAlumno;
         }
     }
