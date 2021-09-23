@@ -23,86 +23,6 @@
 
         }
 
-        public static function MostrarConsulta($id){
-            generarHtml("consulta",["mostrarConsultaId" => $id]);
-        }
-        
-        public static function DevolverUserConId($id){
-            $u = new UserModelo();
-            $u -> id = $id;
-            $u -> getDatosConId();
-            return $u;
-        }
-
-        public static function MostrarLogin(){
-            session_start();
-            if(isset($_SESSION['autenticado'])) header("Location: /principal");
-            else return cargarVista("login");
-        }
-
-        public static function MostrarRegistro(){
-            session_start();
-            if(isset($_SESSION['autenticado'])) header("Location: /principal");
-            else return cargarVista("registro");
-        }
-
-        public static function MostrarMenuPrincipal(){
-            session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            else return cargarVista("bienvenida");
-        }
-
-        public static function MostrarEditarPerfil(){
-            session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            else return cargarVista("perfiledicion");
-        }
-
-        public static function MostrarPerfil(){
-            session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            else return cargarVista("perfil");
-        }
-
-        public static function MostrarGrupos(){
-            session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            return generarHtml('grupos',['grupos' => self::DevolverGruposDeAlumno($_SESSION['id'])]);
-        }
-
-        public static function MostrarRealizarConsulta(){
-            session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            elseif($_SESSION['usuarioTipodeusuario'] !== "alumno") header("Location: /principal");
-            else return cargarVista("realizarconsulta");
-        }
-
-        private static function crearSesion($usuario){
-            session_start();
-            ob_start();
-            $_SESSION['usuarioId'] = $usuario -> id;
-            $_SESSION['usuarioNombre'] = $usuario -> nombre;
-            $_SESSION['usuarioApellido'] = $usuario -> apellido;
-            $_SESSION['usuarioEmail'] = $usuario -> email;
-            $_SESSION['usuarioAvatar'] = $usuario -> avatar;
-            $_SESSION['usuarioTipodeusuario'] = $usuario -> tipodeusuario;
-            $_SESSION['autenticado'] = true;
-
-        }
-
-        public static function CerrarSesion(){
-            session_start();
-            ob_start();
-            unset($_SESSION['autenticado']);
-            unset($_SESSION['usuarioId']);
-            unset($_SESSION['usuarioNombre']);
-            unset($_SESSION['usuarioApellido']);
-            unset($_SESSION['usuarioEmail']);
-            unset($_SESSION['usuarioAvatar']);
-            unset($_SESSION['usuarioTipodeusuario']);
-            header("Location: /login");
-        }
-
         public static function AltaDeUsuario($id,$nombre,$apellido,$email,$password1,$password2,$tipodeusuario){
 
             if($id !== "" && $password1 !== "" && $nombre !== "" && $apellido !== "" && $tipodeusuario !== "" && $password1 == $password2){
@@ -149,16 +69,84 @@
             }
             return generarHtml('perfil',["falla" => true]);
         }
+        
+        private static function crearSesion($usuario){
+            session_start();
+            ob_start();
+            $_SESSION['usuarioId'] = $usuario -> id;
+            $_SESSION['usuarioNombre'] = $usuario -> nombre;
+            $_SESSION['usuarioApellido'] = $usuario -> apellido;
+            $_SESSION['usuarioEmail'] = $usuario -> email;
+            $_SESSION['usuarioAvatar'] = $usuario -> avatar;
+            $_SESSION['usuarioTipodeusuario'] = $usuario -> tipodeusuario;
+            $_SESSION['autenticado'] = true;
 
-        public static function AsignarGruposAlumno($id, $grupos){
-            $u = new UserModelo();
-            $u -> id = $id;
-            $u -> AsignarGruposAlumno($grupos);
         }
 
-        public static function DevolverGruposDeAlumno($id){
+        public static function CerrarSesion(){
+            session_start();
+            ob_start();
+            unset($_SESSION['autenticado']);
+            unset($_SESSION['usuarioId']);
+            unset($_SESSION['usuarioNombre']);
+            unset($_SESSION['usuarioApellido']);
+            unset($_SESSION['usuarioEmail']);
+            unset($_SESSION['usuarioAvatar']);
+            unset($_SESSION['usuarioTipodeusuario']);
+            header("Location: /login");
+        }
+
+        public static function DevolverUserConId($id){
             $u = new UserModelo();
             $u -> id = $id;
-            return $u -> GetGruposDeAlumno;
+            $u -> getDatosConId();
+            return $u;
+        }
+
+        public static function MostrarConsulta($id){
+            generarHtml("consulta",["mostrarConsultaId" => $id]);
+        }
+
+        public static function MostrarLogin(){
+            session_start();
+            if(isset($_SESSION['autenticado'])) header("Location: /principal");
+            else return cargarVista("login");
+        }
+
+        public static function MostrarRegistro(){
+            session_start();
+            if(isset($_SESSION['autenticado'])) header("Location: /principal");
+            else return cargarVista("registro");
+        }
+
+        public static function MostrarMenuPrincipal(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("bienvenida");
+        }
+
+        public static function MostrarEditarPerfil(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("perfiledicion");
+        }
+
+        public static function MostrarPerfil(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("perfil");
+        }
+
+        public static function MostrarGrupos(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            return generarHtml('grupos',['grupos' => AlumnoController::DevolverGruposDeAlumno()]);
+        }
+
+        public static function MostrarRealizarConsulta(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            elseif($_SESSION['usuarioTipodeusuario'] !== "alumno") header("Location: /principal");
+            else return cargarVista("realizarconsulta");
         }
     }
