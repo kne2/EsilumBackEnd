@@ -92,15 +92,26 @@
         }
 
         public static function CargarChat($nombreAsignatura){
-            $idchat = self::DevolverIdPorAsignatura($nombreAsignatura);
-            foreach(MensajeController::DevolverMensajesPorId($idchat) as $fila){
-                echo'
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted text-left">'. UserController::DevolverUserConId($fila['userId']) -> nombre . " " . UserController::DevolverUserConId($fila['userId']) -> apellido ." - ".$fila['fecha'].'</h6>
-                        <p class="card-text float-left"> '. $fila['contenido'] . '</p>
+            if (!self::CheckearEstado($nombreAsignatura)){
+                $idchat = self::DevolverIdPorAsignatura($nombreAsignatura);
+                foreach(MensajeController::DevolverMensajesPorId($idchat) as $fila){
+                    echo'
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted text-left">'. UserController::DevolverUserConId($fila['userId']) -> nombre . " " . UserController::DevolverUserConId($fila['userId']) -> apellido ." - ".$fila['fecha'].'</h6>
+                            <p class="card-text float-left"> '. $fila['contenido'] . '</p>
+                        </div>
                     </div>
-                </div>
+                    ';
+                }
+            }
+            else{
+                echo '
+                <div class="card">
+                        <div class="card-body">
+                            <p class="card-text float-left"> Chat Finalizado </p>
+                        </div>
+                    </div>
                 ';
             }
         }

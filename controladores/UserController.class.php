@@ -142,12 +142,6 @@
             else return cargarVista("perfil");
         }
 
-        public static function MostrarGrupos(){
-            session_start();
-            if(!isset($_SESSION['autenticado'])) header("Location: /login");
-            return generarHtml('grupos',['grupos' => AlumnoController::DevolverGruposDeAlumno()]);
-        }
-
         public static function MostrarRealizarConsulta(){
             session_start();
             if(!isset($_SESSION['autenticado'])) header("Location: /login");
