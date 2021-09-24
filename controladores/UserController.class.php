@@ -107,6 +107,11 @@
             generarHtml("consulta",["mostrarConsultaId" => $id]);
         }
 
+        public static function MostrarChat(){
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("chat");
+        }
+
         public static function MostrarLogin(){
             session_start();
             if(isset($_SESSION['autenticado'])) header("Location: /principal");
