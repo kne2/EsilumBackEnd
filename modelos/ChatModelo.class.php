@@ -1,17 +1,14 @@
 <?php 
     require '../EsilumBackEnd/utils/autoloader.php';
 
-    class ConsultaModelo extends Modelo{
+    class ChatModelo extends Modelo{
         public $id;
-        public $titulo;
-        public $descripcion;
+        public $nombreAsignatura;
+        public $userId;
         public $fecha;
-        public $estado;
-        public $alumnoId;
-        public $docenteId;
+        public $resuelto;
 
         public function guardar(){
-            error_log("Guardar");
             $this -> prepararInsert();
             $this -> sentencia -> execute();
 
@@ -20,18 +17,6 @@
             }
         }
 
-        private function prepararInsert(){
-            error_log("prepararInsert");
-            $sql = "INSERT INTO consulta(consultaTitulo,consultaDescripcion,fecha,resuelto,alumnoId) VALUES (?,?,?,?,?)";
-            $this -> sentencia = $this -> conexion -> prepare($sql);
-            $this -> sentencia -> bind_param("sssss",
-                $this -> titulo,
-                $this -> descripcion,
-                $this -> fecha,
-                $this -> estado,
-                $this -> alumnoId
-            );
-        }
         public function eliminar(){
             $this -> prepararEliminar();
             $this -> sentencia -> execute();
@@ -41,13 +26,58 @@
             }
         }
 
+        private function prepararInsert(){
+            error_log("prepararInsert");
+            $sql = "INSERT INTO chat(userId,nombreAsignatura,fecha,resuelto) VALUES (?,?,?,?)";
+            $this -> sentencia = $this -> conexion -> prepare($sql);
+            $this -> sentencia -> bind_param("ssss",
+                $this -> userId,
+                $this -> nombreAsignatura,
+                $this -> fecha,
+                $this -> resuelto,
+            );
+        }
+
         private function prepararEliminar(){
-            $sql = "DELETE FROM consulta WHERE id = ?";
+            $sql = "DELETE FROM chat WHERE id = ?";
             $this -> sentencia = $this -> conexion -> prepare($sql);
             $this -> sentencia -> bind_param("i", $this -> id);
         }
 
+        public function CheckearEstado($nombreAsignatura){
+            $sql = "SELECT * FROM chat WHERE resuelto = 'false' AND nombreAsignatura = '{$nombreAsignatura}'";
+            $res = $this -> conexion -> query($sql);
+            if($res) return ($res->num_rows === 0) ? True : False;
+            if(!$res) return True;
+        }
 
+        public function getChatConAsignatura($nombreAsignatura){
+            if (!$this -> CheckearEstado($nombreAsignatura)){
+                $sql = "SELECT chatId,userId,nombreAsignatura,fecha,resuelto FROM chat WHERE resuelto = 'false' AND nombreAsignatura = ?";
+                $this -> sentencia = $this -> conexion -> prepare($sql);
+                $this -> sentencia -> bind_param("s", $nombreAsignatura);
+                $this -> sentencia -> execute();
+
+                $resultado = $this -> sentencia -> get_result() -> fetch_assoc();
+
+                $this -> id = $resultado['chatId'];
+                $this -> userId = $resultado['userId'];
+                $this -> nombreAsignatura = $resultado['nombreAsignatura'];
+                $this -> fecha = $resultado['fecha'];
+                $this -> resuelto = $resultado['resuelto'];
+            }
+        }
+
+        public function CambiarAResuelto($id){
+            $resuelto = "true";
+            $sql = "UPDATE chat set resuelto = ? WHERE chatId = ?";
+            $this -> sentencia = $this -> conexion -> prepare($sql);
+            $this -> sentencia -> bind_param("si",
+                $resuelto,
+                $id
+            );
+            $this -> sentencia -> execute();
+        }
 
         public function obtenerTodos(){
             $filas = $this -> crearArrayDeConsultas();
@@ -72,7 +102,6 @@
                 array_push($filas,$c);
             }
             return $filas;
-
         }
 
         public function obtenerUno(){
@@ -82,8 +111,8 @@
                 throw new Exception("Error al obtener la personas: " . $this -> sentencia -> error);
             }
             $this -> asignarCamposDeConsulta($resultado);
-
         }
+
         public function getDatosConId(){
             $sql = "SELECT consultaId,consultaTitulo,consultaDescripcion,fecha,resuelto,alumnoId FROM consulta WHERE consultaId = ?";
             $this -> sentencia = $this -> conexion -> prepare($sql);
