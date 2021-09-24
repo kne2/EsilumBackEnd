@@ -1,11 +1,12 @@
 <?php 
     require '../EsilumBackEnd/utils/autoloader.php';
 
-    class ChatModelo extends Modelo{
+    class MensajeModelo extends Modelo{
         public $id;
-        public $nombreAsignatura;
+        public $chatId;
+        public $userId;
         public $fecha;
-        public $estado;
+        public $contenido;
 
         public function guardar(){
             error_log("Guardar");
@@ -29,6 +30,7 @@
                 $this -> alumnoId
             );
         }
+
         public function eliminar(){
             $this -> prepararEliminar();
             $this -> sentencia -> execute();

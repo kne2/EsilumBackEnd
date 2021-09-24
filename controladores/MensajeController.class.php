@@ -2,7 +2,7 @@
 
     require '../EsilumBackEnd/utils/autoloader.php';
 
-    class ChatController{
+    class CMensajeController{
 
         public static function NuevaConsulta($titulo,$descripcion){
             if(!isset($_SESSION['autenticado'])){
