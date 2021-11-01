@@ -57,7 +57,7 @@
         }
 
         private function prepararAutenticacion(){
-            $sql = "SELECT id, passwordhash, nombre, apellido, email, avatar, tipodeusuario FROM user WHERE id=?";
+            $sql = "SELECT id, passwordhash, nombre, apellido, email, avatar, tipodeusuario FROM user WHERE aprovado='true' AND id=?";
             $this -> sentencia = $this -> conexion -> prepare($sql);
             $this -> sentencia -> bind_param("s",
                 $this -> id
@@ -74,23 +74,45 @@
                 ucwords(strtolower($this -> apellido)),
                 $this -> checkEmail(),
                 $this -> avatar,
-                $_SESSION['usuarioTipodeusuario'],
+                $this -> tipodeusuario,
                 $this -> id,
             );
 
         }
         private function prepararInsert(){
+            $falso = "false";
             $this -> password = $this -> hashearPassword($this -> password);
-            $sql = "INSERT INTO user(id, passwordhash, nombre, apellido, email, avatar, tipodeusuario) VALUES (?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO user(id, passwordhash, nombre, apellido, email, avatar, tipodeusuario, aprovado) VALUES (?,?,?,?,?,?,?,?)";
             $this -> sentencia = $this -> conexion -> prepare($sql);
-            $this -> sentencia -> bind_param("sssssis",
+            $this -> sentencia -> bind_param("sssssiss",
                 $this -> id,
                 $this -> password,
                 ucwords(strtolower($this -> nombre)),
                 ucwords(strtolower($this -> apellido)),
                 $this -> checkEmail(),
                 $this -> avatar,
-                $this -> tipodeusuario, 
+                $this -> tipodeusuario,
+                $falso
+            );
+        }
+
+        public function AprovarGrupo($id,$grupo){
+            $this -> password = $this -> hashearPassword($this -> password);
+            $sql = "UPDATE alumnoAnotaGrupo set aprovado = 'true' WHERE id=? AND nombregrupo=?";
+            $this -> sentencia = $this -> conexion -> prepare($sql);
+            $this -> sentencia -> bind_param("ss",
+                $id,
+                $grupo
+            );
+        }
+
+        public function AprovarAsignatura($id,$asignatura){
+            $this -> password = $this -> hashearPassword($this -> password);
+            $sql = "UPDATE docenteAnotaAsignatura set aprovado = 'true' WHERE id=? AND nombreAsignatura=?";
+            $this -> sentencia = $this -> conexion -> prepare($sql);
+            $this -> sentencia -> bind_param("ss",
+                $id,
+                $asignatura
             );
         }
 
