@@ -154,4 +154,28 @@
             elseif($_SESSION['usuarioTipodeusuario'] !== "alumno") header("Location: /principal");
             else return cargarVista("realizarconsulta");
         }
+        
+        public static function MostrarAprovarUsuarios(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("usuariospendientes");
+        }
+
+        public static function MostrarAprovarGrupo(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("grupospendientes");
+        }
+
+        public static function MostrarAprovarAsignatura(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("asignaturaspendietes");
+        }
+
+        public static function MostrarListaUsuarios(){
+            session_start();
+            if(!isset($_SESSION['autenticado'])) header("Location: /login");
+            else return cargarVista("listarusuarios");
+        }
     }
